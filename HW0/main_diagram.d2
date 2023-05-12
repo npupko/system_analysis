@@ -1,0 +1,118 @@
+classes: {
+  async: {
+    style: {
+      stroke-dash: 3
+    }
+  }
+}
+
+Auth: {
+  User
+  Role
+
+  User -> Role
+}
+
+HeadHunter: {
+  Work requests
+  Worker
+  Worker profile
+  Tests
+  Manager
+
+  Worker -> Worker profile
+  Worker -> Work requests
+  Manager <- Tests <- Worker
+}
+
+Auth.User -> HeadHunter.Worker: { style.stroke-dash: 3 }
+Auth.User -> HeadHunter.Manager: { style.stroke-dash: 3 }
+
+HeadHunter.Worker profile -> CRM.Worker profile: { style.stroke-dash: 3 }
+Auth.User -> CRM.Manager: { style.stroke-dash: 3 }
+
+CRM: {
+  Manager
+  Client: "Reference sample" {
+    tooltip: "Client is a person who orders services"
+  }
+  Worker profile
+  Request form: { shape: page }
+  Tasks
+  Service types
+  Matching algorithm: { shape: package }
+  Work orders
+  Dashboard: { shape: page }
+
+  Client -> Request form
+  Request form -> Matching algorithm
+  Matching algorithm <- Tasks
+  Matching algorithm <- Service types
+  Matching algorithm <- Worker profile
+  Manager -> Dashboard
+  Client -> Dashboard
+  Worker profile -> Work orders
+  Client -> Work orders
+  Service types -> Request form
+}
+
+CRM.Work orders -> Betting stystem.Work orders: { style.stroke-dash: 3 }
+
+Auth.User -> Betting stystem.Manager: { style.stroke-dash: 3 }
+Auth.User -> Betting stystem.Worker: { style.stroke-dash: 3 }
+
+Betting stystem: {
+  Manager
+  Worker
+  Work orders
+  Worker -> Work orders
+  Bets
+  Manager -> Bets
+  Bets -> Work orders
+}
+
+
+Auth.User -> Payments.Manager: { style.stroke-dash: 3 }
+Auth.User -> Payments.Worker: { style.stroke-dash: 3 }
+
+Payments: {
+  Payment
+  Invoice
+  Worker
+  Manager
+  Penalty log
+  Payment log
+
+  Payment -> Invoice
+  Invoice -> Worker
+  Invoice -> Manager
+  Payment -> Worker
+  Payment -> Manager
+  Worker -> Payment log <- Payment
+  Client -> Payment log
+  Worker -> Penalty log <- Payment
+}
+
+Auth.User -> Warehouse.Employee: { style.stroke-dash: 3 }
+Warehouse: {
+  tooltip: "Consumable preparation system"
+  Employee
+  Order
+  Worker
+  Client
+  Worker -> Order
+  Employee -> Order
+  Fur-tune cookie: {
+    shape: hexagon
+    tooltip: "Real world object"
+  }
+}
+
+Warehouse.Client -> Cookie factory: { style.stroke-dash: 3 }
+
+CRM.CLient -> Warehouse.Client: { style.stroke-dash: 3 }
+Cookie factory -> Warehouse.Fur-tune cookie: { style.stroke-dash: 3 }
+
+Cookie factory: {
+  shape: cloud
+}
