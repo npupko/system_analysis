@@ -74,7 +74,7 @@ quality_control: "Quality Control" {
   order <- client: has_many
 }
 
-clients_platform: "Clients Platform" {
+main_platform: "Clients/Orders Platform" {
   manager
   client
   worker
@@ -93,13 +93,8 @@ clients_platform: "Clients Platform" {
   client -> order_request_form: has_many
   order_request_form -> order: has_one
   order -> order_status: has_one
-}
 
-workers_platform: "Workers Platform" {
-  worker
   consumables_request
-  order
-  order_status
   starting_photo
   ending_photo
 
@@ -111,28 +106,25 @@ workers_platform: "Workers Platform" {
 }
 
 hiring.worker.class: producer
-hiring.worker -> clients_platform.worker: { class: async }
-hiring.worker -> workers_platform.worker: { class: async }
+hiring.worker -> main_platform.worker: { class: async }
 hiring.worker -> billing.worker: { class: async }
 
-clients_platform.manager.class: producer
-clients_platform.manager -> hiring.manager: { class: async }
-clients_platform.manager -> betting_system.manager: { class: async }
-clients_platform.manager -> billing.manager: { class: async }
-clients_platform.manager -> quality_control.manager: { class: async }
+main_platform.manager.class: producer
+main_platform.manager -> hiring.manager: { class: async }
+main_platform.manager -> betting_system.manager: { class: async }
+main_platform.manager -> billing.manager: { class: async }
+main_platform.manager -> quality_control.manager: { class: async }
 
-clients_platform.client.class: producer
-clients_platform.client -> warehouse.client: { class: async }
-clients_platform.client -> quality_control.client: { class: async }
+main_platform.client.class: producer
+main_platform.client -> warehouse.client: { class: async }
+main_platform.client -> quality_control.client: { class: async }
 
-workers_platform.consumables_request.class: producer
-workers_platform.consumables_request -> warehouse.consumables_request: { class: async }
+main_platform.consumables_request.class: producer
+main_platform.consumables_request -> warehouse.consumables_request: { class: async }
 
-workers_platform.order_status.class: producer
-workers_platform.order_status -> betting_system.order_status: { class: async }
-workers_platform.order_status -> clients_platform.order_status: { class: async }
+main_platform.order_status.class: producer
+main_platform.order_status -> betting_system.order_status: { class: async }
 
-clients_platform.order.class: producer
-clients_platform.order -> billing.order: { class: async }
-clients_platform.order -> quality_control.order: { class: async }
-clients_platform.order -> workers_platform.order: { class: async }
+main_platform.order.class: producer
+main_platform.order -> billing.order: { class: async }
+main_platform.order -> quality_control.order: { class: async }
