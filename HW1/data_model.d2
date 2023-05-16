@@ -1,0 +1,102 @@
+hiring: "Hiring" {
+  candidate
+  manager
+  test
+  information_form
+  questions
+  answers
+  workers: { tooltip: "Кандидаты, добавленные в базу" }
+
+  test -> questions: has_many
+  questions <- answers: has_many
+  candidate -> answers: has_many
+  candidate -> information_form: has_one
+  candidate -> test: has_one
+}
+
+warehouse: "Warehouse" {
+  consumables_request
+  storekeeper
+  consumables
+  job_acceptance_blank
+  client_info: { tooltip: "Для отправки в пекарню" }
+  packages: { tooltip: "Пакеты с материалами, которые подготовили рабочие" }
+  storekeeper -> packages: has_many
+  packages -> consumables: has_many
+}
+
+betting_system: "Betting System" {
+  job_info
+  job_status
+
+  bet
+  manager
+
+  manager -> bet: has_many
+  bet -> job_info: has_one
+  job_info -> job_status: has_one
+}
+
+billing: "Billing" {
+  manager
+  worker
+  client
+  client_invoice
+  worker_invoice
+  order
+  worker_fine
+  transaction
+
+  worker -> worker_invoice: has_many
+  manager -> transaction: has_many
+  client_invoice -> transaction: has_many
+  worker_invoice -> transaction: has_many
+  client -> client_invoice: has_many
+  client -> order: has_many
+}
+
+quality_control: "Quality Control" {
+  client
+  client_info
+  manager
+  order
+  failure_reasons_form
+
+  order -> failure_reasons_form: has_one
+  order <- client: has_many
+  client -> client_info: has_one
+}
+
+clients_platform: "Clients Platform" {
+  manager
+  client
+  worker
+
+  billings
+  order_request_form
+
+  order_type
+  order
+
+  client -> order: has_many
+  order -> order_type: has_one
+  client -> billings: has_many
+  order_request_form -> order_type: has_one
+  client -> order_request_form: has_many
+  order_request_form -> order: has_one
+}
+
+workers_platform: "Workers Platform" {
+  worker
+  consumables_request
+  order
+  order_status
+  starting_photo
+  ending_photo
+
+  order -> order_status: has_one
+  order -> starting_photo: has_one
+  order -> ending_photo: has_one
+  worker -> order: has_many
+  worker -> consumables_request: has_many
+}
