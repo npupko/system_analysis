@@ -1,0 +1,57 @@
+classes: {
+  streaming: {
+    style: {
+      stroke: "blue"
+      stroke-dash: 4
+    }
+  }
+
+  business_event: {
+    style: {
+      stroke: "red"
+    }
+  }
+}
+
+hiring: "Hiring" {
+}
+
+warehouse: "Warehouse" {
+}
+
+betting_system: "Betting System" {
+}
+
+billing: "Billing" {
+}
+
+quality_control: "Quality Control" {
+}
+
+main_platform: "Clients/Orders Platform" {
+}
+
+main_platform -> warehouse: "Client" { class: streaming }
+main_platform -> warehouse: "Consumables request" { class: streaming }
+
+main_platform -> quality_control: "Client" { class: streaming }
+main_platform -> quality_control: "Order" { class: streaming }
+main_platform -> quality_control: "Manager" { class: streaming }
+
+main_platform -> betting_system: "Manager" { class: streaming }
+main_platform -> betting_system: "Order_status" { class: streaming }
+
+main_platform -> billing: "Manager" { class: streaming }
+main_platform -> billing: "Client" { class: streaming }
+main_platform -> billing: "Order" { class: streaming }
+
+hiring -> billing: "Worker" { class: streaming }
+hiring -> main_platform: "Worker" { class: streaming }
+
+main_platform -> warehouse: "Consumables requested" { class: business_event }
+main_platform -> betting_system: "Worker started his order" { class: business_event }
+main_platform -> betting_system: "Worker failed his order" { class: business_event }
+main_platform -> betting_system: "Worker cancelled his order" { class: business_event }
+main_platform -> quality_control: "Worker cancelled his order" { class: business_event }
+main_platform -> quality_control: "Worker failed his order" { class: business_event }
+hiring -> main_platform: "Worker hired" { class: business_event }
