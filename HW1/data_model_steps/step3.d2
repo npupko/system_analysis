@@ -1,0 +1,130 @@
+classes: {
+  async: {
+    style.stroke-dash: 4
+  }
+
+  producer: {
+    style.stroke: "blue"
+  }
+}
+
+hiring: "Hiring" {
+  candidate
+  manager
+  test
+  information_form
+  questions
+  answers
+  worker: { tooltip: "Кандидаты, добавленные в базу" }
+
+  test -> questions: has_many
+  questions <- answers: has_many
+  candidate -> answers: has_many
+  candidate -> information_form: has_one
+  candidate -> test: has_one
+}
+
+warehouse: "Warehouse" {
+  consumables_request
+  storekeeper
+  consumables
+  job_acceptance_blank
+  client: { tooltip: "Для отправки в пекарню" }
+  packages: { tooltip: "Пакеты с материалами, которые подготовили рабочие" }
+  storekeeper -> packages: has_many
+  packages -> consumables: has_many
+}
+
+betting_system: "Betting System" {
+  order_status
+
+  bet
+  manager
+
+  manager -> bet: has_many
+  bet -> order_status: has_one
+}
+
+billing: "Billing" {
+  manager
+  worker
+  client
+  client_invoice
+  worker_invoice
+  order
+  worker_fine
+  transaction
+
+  worker -> worker_invoice: has_many
+  manager -> transaction: has_many
+  client_invoice -> transaction: has_many
+  worker_invoice -> transaction: has_many
+  client -> client_invoice: has_many
+  client -> order: has_many
+  worker -> worker_fine: has_many
+}
+
+quality_control: "Quality Control" {
+  client
+  manager
+  order
+  failure_reasons_form
+
+  order -> failure_reasons_form: has_one
+  order <- client: has_many
+}
+
+main_platform: "Clients/Orders Platform" {
+  manager
+  client
+  worker
+
+  billings
+  order_request_form
+
+  order_type
+  order
+  order_status
+
+  client -> order: has_many
+  order -> order_type: has_one
+  client -> billings: has_many
+  order_request_form -> order_type: has_one
+  client -> order_request_form: has_many
+  order_request_form -> order: has_one
+  order -> order_status: has_one
+
+  consumables_request
+  starting_photo
+  ending_photo
+
+  order -> order_status: has_one
+  order -> starting_photo: has_one
+  order -> ending_photo: has_one
+  worker -> order: has_many
+  worker -> consumables_request: has_many
+}
+
+hiring.worker.class: producer
+hiring.worker -> main_platform.worker: { class: async }
+hiring.worker -> billing.worker: { class: async }
+
+main_platform.manager.class: producer
+main_platform.manager -> hiring.manager: { class: async }
+main_platform.manager -> betting_system.manager: { class: async }
+main_platform.manager -> billing.manager: { class: async }
+main_platform.manager -> quality_control.manager: { class: async }
+
+main_platform.client.class: producer
+main_platform.client -> warehouse.client: { class: async }
+main_platform.client -> quality_control.client: { class: async }
+
+main_platform.consumables_request.class: producer
+main_platform.consumables_request -> warehouse.consumables_request: { class: async }
+
+main_platform.order_status.class: producer
+main_platform.order_status -> betting_system.order_status: { class: async }
+
+main_platform.order.class: producer
+main_platform.order -> billing.order: { class: async }
+main_platform.order -> quality_control.order: { class: async }
