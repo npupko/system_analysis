@@ -18,6 +18,7 @@
 Пытался представить как клиенты пользовались бы платформой (В плане UI). На основе этого разделил *Workers Platform*, *Clients Platform* и *Quality Control*
 
 Итог: [Step3.pdf](./es_steps/step3.pdf)
+[Miro](https://miro.com/app/board/uXjVMJwgTXY=/?share_link_id=88646174588)
 
 # Data model
 Начал с переноса контекстов из ES и заполнения разными entity. Вышло вот так: [svg](./data_model_steps/step1.svg)|[d2](./data_model_steps/step1.d2)
