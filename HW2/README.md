@@ -24,6 +24,9 @@
 
 ## Обновления ES
 
+- [Full PDF of new ES schema](./es_on_bounded_contexts.pdf)
+- [Miro link with everything](https://miro.com/app/board/uXjVMJwgTXY=/?share_link_id=980702483848)
+
 ### Я довольно сильно изменил Hiring домен
 
 #### Before
