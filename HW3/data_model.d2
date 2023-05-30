@@ -1,0 +1,130 @@
+classes: {
+  async: {
+    style.stroke-dash: 4
+  }
+
+  producer: {
+    style.stroke: "blue"
+  }
+}
+
+hiring: "Applicant Tracking System" {
+  candidate
+  manager
+  test
+  information_form
+  question
+  answer
+  worker: { tooltip: "Кандидаты, добавленные в базу" }
+
+  test -> question: has_many
+  question <- answer: has_one
+  candidate -> answer: has_many
+  candidate -> information_form: has_one
+  candidate -> test: has_one
+  candidate -> worker: has_one
+}
+
+workers_payroll: "Workers Payroll Service" {
+  worker
+  payroll
+  manager
+  transaction
+  order
+
+  worker -> payroll: has_many
+  payroll -> transaction: has_many
+  worker -> order: has_many
+
+  manager -> transaction: has_many
+}
+
+
+quality_control: "Quality Control System" {
+  client
+  manager
+  order
+  failure_reasons_form
+
+  order -> failure_reasons_form: has_one
+  order <- client: has_many
+}
+
+warehouse: "Warehouse" {
+  consumables_request
+  worker
+  storekeeper
+  consumables
+  job_acceptance_blank
+  client: { tooltip: "Для отправки в пекарню" }
+  packages: { tooltip: "Пакеты с материалами, которые подготовили рабочие" }
+  storekeeper -> packages: has_many
+  packages -> consumables: has_many
+}
+
+betting_system: "Betting System" {
+  order
+
+  bet
+  manager
+
+  manager -> bet: has_many
+  bet -> order: has_one
+}
+
+matching_algorithm: "Matching Algorithm" {
+  order
+  worker
+  client
+
+  client -> order: has_many
+  worker -> order: has_many
+}
+
+loyalty_system: "Client billing" {
+  client
+  worker
+  order
+  transaction
+
+  client -> order: has_many
+  worker -> order: has_many
+  client -> transaction: has_many
+}
+
+order_processing: "Order processing and fulfillment" {
+  manager
+  worker
+  client
+
+  order_request_form
+
+  order_type
+  order
+  order_status
+
+  client -> order: has_many
+  order -> order_type: has_one
+  order_request_form -> order_type: has_one
+  client -> order_request_form: has_many
+  order_request_form -> order: has_one
+  order -> order_status: has_one
+  worker -> order: has_many
+}
+
+hiring.worker.class: producer
+hiring.worker -> workers_payroll.worker: { class: async }
+# hiring.worker -> warehouse.worker: { class: async }
+# hiring.worker -> loyalty_system.worker: { class: async }
+# hiring.worker -> quality_control.worker: { class: async }
+hiring.worker -> order_processing.worker: { class: async }
+hiring.worker -> matching_algorithm.worker: { class: async }
+hiring.worker -> warehouse.worker: { class: async }
+
+order_processing.manager.class: producer
+order_processing.client.class: producer
+order_processing.manager -> betting_system.manager: { class: async }
+order_processing.client -> quality_control.client: { class: async }
+
+order_processing.order.class: producer
+order_processing.order -> loyalty_system.order: { class: async }
